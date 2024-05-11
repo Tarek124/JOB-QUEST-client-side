@@ -1,3 +1,5 @@
+import "animate.css";
+
 const Banner = () => {
   return (
     <div className="flex justify-center h-[90vh] items-center gap-16 p-32 text-white bg-gradient-to-r from-sky-700 to-indigo-400">
@@ -12,9 +14,11 @@ const Banner = () => {
           Whether you are a seasoned professional or just starting your career
           journey, JOBQUEST has something for everyone !
         </p>
-        <button className="bn632-hover bn26 shadow-lg mt-4">View All Job</button>
+        <button className="bn632-hover bn26 shadow-lg mt-4">
+          View All Job
+        </button>
       </div>
-      <div className="w-1/3">
+      <div className="w-1/3 animate__fadeInRight animate__animated">
         <img
           src="https://seriesofrandomthoughts.files.wordpress.com/2021/05/how-to-get-a-dream-job-compressor.png"
           alt=""

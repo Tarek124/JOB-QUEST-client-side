@@ -1,6 +1,7 @@
 import { CircularProgress } from "@mui/material";
 import useAuth from "../hooks/useAuth";
 import Banner from "./Banner/Banner";
+import JobByCategory from "./JobByCategory/JobByCategory";
 
 export default function Homepage() {
   const data = useAuth();
@@ -11,6 +12,7 @@ export default function Homepage() {
   ) : (
     <div>
       <Banner />
+      <JobByCategory />
     </div>
   );
 }
