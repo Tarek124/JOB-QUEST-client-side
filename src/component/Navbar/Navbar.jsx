@@ -13,13 +13,16 @@ import MenuItem from "@mui/material/MenuItem";
 import WorkIcon from "@mui/icons-material/Work";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const pages = ["Home", "All Jobs", "Applied Jobs", "Add A Job", "My Jobs"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const data = useAuth();
+  const settings = [data?.user?.displayName, data?.user?.email, "Logout"];
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -35,7 +38,21 @@ function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
+  const logOut = (e) => {
+    if (e == "Logout") {
+      data
+        .logout()
+        .then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Login successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        })
+        .catch((err) => console.log(err));
+    }
+  };
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -145,9 +162,13 @@ function Navbar() {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
+              {data?.user ? (
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src={data?.user?.photoURL} />
+                </IconButton>
+              ) : (
+                <Link to="login">Login</Link>
+              )}
             </Tooltip>
             <Menu
               sx={{ mt: "45px" }}
@@ -166,7 +187,13 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem
+                  key={setting}
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    logOut(setting);
+                  }}
+                >
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
