@@ -7,11 +7,15 @@ import MyJobs from "../component/MyJobs/MyJobs";
 import AddJob from "../component/AddJob/AddJob";
 import Login from "../Register/Login";
 import Registation from "../Register/Registation";
+import NotFoundPage from "../NotFoundPage/NotFoundPage";
+import JobDetails from "../component/JobDetails/JobDetails";
+import PrivateRoute from "../privateRoute/PrivateRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <NotFoundPage />,
     children: [
       { path: "/", element: <Homepage /> },
       { path: "/alljobs", element: <AllJobs /> },
@@ -20,6 +24,14 @@ const router = createBrowserRouter([
       { path: "/myjobs", element: <MyJobs /> },
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Registation /> },
+      {
+        path: "/jobDetails/:id",
+        element: (
+          <PrivateRoute>
+            <JobDetails />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
 ]);

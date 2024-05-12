@@ -14,7 +14,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import Swal from "sweetalert2";
+import useSwal from "../../hooks/useSwal";
 
 const pages = ["Home", "All Jobs", "Applied Jobs", "Add A Job", "My Jobs"];
 
@@ -22,6 +22,8 @@ function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const data = useAuth();
+  const { swalSuccess } = useSwal();
+
   const settings = [data?.user?.displayName, data?.user?.email, "Logout"];
 
   const handleOpenNavMenu = (event) => {
@@ -43,12 +45,7 @@ function Navbar() {
       data
         .logout()
         .then(() => {
-          Swal.fire({
-            icon: "success",
-            title: "Login successfully",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+          swalSuccess("Logout successfully");
         })
         .catch((err) => console.log(err));
     }
@@ -186,9 +183,9 @@ function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+              {settings.map((setting, inx) => (
                 <MenuItem
-                  key={setting}
+                  key={inx}
                   onClick={() => {
                     handleCloseUserMenu();
                     logOut(setting);

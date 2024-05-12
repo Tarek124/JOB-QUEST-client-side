@@ -1,12 +1,16 @@
 import Lottie from "lottie-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import myAnimation from "./Animation - 1715438369048.json";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import useAuth from "../hooks/useAuth";
-import Swal from "sweetalert2";
+import useSwal from "../hooks/useSwal";
 
 const Registation = () => {
   const data = useAuth();
+  const { swalErr, swalSuccess } = useSwal();
+  const location = useLocation();
+  const myLocation = location.state ? location.state : "/";
+  const navigate = useNavigate();
   const handleRegister = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -21,30 +25,18 @@ const Registation = () => {
         data
           .updateUser(name, photoURL)
           .then(() => {
-            Swal.fire({
-              icon: "Welcome",
-              title: "Registration successfully",
-              showConfirmButton: false,
-              timer: 1500,
-            });
+            swalSuccess("Registration successfully");
+            navigate(myLocation);
             form.reset();
           })
           .catch((err) => {
             console.log(err);
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Something went wrong!",
-            });
+            swalErr("username or photo url is not valid");
           });
       })
       .catch((err) => {
         console.log(err);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong!",
-        });
+        swalErr("Registration failed");
       });
   };
   return (

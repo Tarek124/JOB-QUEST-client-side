@@ -1,13 +1,16 @@
 import GoogleIcon from "@mui/icons-material/Google";
 import Lottie from "lottie-react";
 import myAnimation from "./Animation - 1715438369048.json";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import Swal from "sweetalert2";
+import useSwal from "../hooks/useSwal";
 
 const Login = () => {
   const data = useAuth();
-  console.log(data);
+  const { swalErr, swalSuccess } = useSwal();
+  const location = useLocation();
+  const myLocation = location.state ? location.state : "/";
+  const navigate = useNavigate();
   const handleLogin = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -16,28 +19,26 @@ const Login = () => {
     data
       .login(email, password)
       .then(() => {
-        Swal.fire({
-          icon: "success",
-          title: "Login successfully",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        swalSuccess("Login successfully");
+        navigate(myLocation);
         form.reset();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        swalErr("password or email is incorrect!");
+        console.log(err);
+      });
   };
   const googleLogin = () => {
     data
       .googleSignIn()
       .then(() => {
-        Swal.fire({
-          icon: "success",
-          title: "Login successfully",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        swalSuccess("Login successfully");
+        navigate(myLocation);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        swalErr("Login Failed");
+      });
   };
   return (
     <div className="bg-[#E7E2FF] p-4 flex justify-center">
