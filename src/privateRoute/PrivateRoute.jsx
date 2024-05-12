@@ -5,7 +5,6 @@ import { CircularProgress } from "@mui/material";
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
-  console.log(location);
   if (user) {
     return children;
   } else {
