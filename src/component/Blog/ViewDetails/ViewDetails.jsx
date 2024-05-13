@@ -8,7 +8,7 @@ const ViewDetails = () => {
   const data = questions.find((x) => x.id == id);
   console.log(data);
   return (
-    <div className="lg:py-20 py-6 lg:px-32 bg-[#1969b9]">
+    <div className="lg:py-20 px-4 py-6 lg:px-32 bg-[#1969b9]">
       <div className="animate__animated animate__fadeIn">
         <h1 className="text-3xl font-semibold lg:w-3/4 text-slate-100 ">
           {data?.question}

@@ -7,7 +7,6 @@ import { instance } from "../../main";
 const AllJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
 
   const handleInputChange = (event) => {
     setSearchInput(event.target.value);
@@ -19,7 +18,7 @@ const AllJobs = () => {
         .get(`/jobs/search?query=${encodeURIComponent(searchInput)}`)
         .then((res) => setJobs(res.data));
     } catch (error) {
-      setErrorMsg(error);
+      console.log(error);
     }
     console.log(searchInput);
   };
@@ -70,11 +69,17 @@ const AllJobs = () => {
       <Typography color="text.secondary">
         Found Result {jobs?.length}
       </Typography>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {jobs.map((item) => (
-          <AllJobCard key={item._id} item={item} />
-        ))}
-      </div>
+      {jobs.length == 0 ? (
+        <div className="mt-10">
+          <h1 className="text-xl">Nothing Found...</h1>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {jobs.map((item) => (
+            <AllJobCard key={item._id} item={item} />
+          ))}
+        </div>
+      )}
     </Box>
   );
 };

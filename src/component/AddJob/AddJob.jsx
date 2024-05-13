@@ -1,7 +1,6 @@
 import { Box, MenuItem, TextField } from "@mui/material";
 import useAuth from "../../hooks/useAuth";
-import { useState } from "react";
-import { DatePicker } from "@mui/lab";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const currencies = ["On Site", "Remote", "Part-Time", "Hybrid"];
 const category = ["Software Development", "Marketing", "Finance", "Design"];
@@ -17,7 +16,6 @@ const salaryRange = [
 
 const AddJob = () => {
   const { user } = useAuth();
-  const [startDate, setStartDate] = useState(new Date());
   console.log(user.displayName);
   return (
     <Box
@@ -107,10 +105,7 @@ const AddJob = () => {
             />
           </div>
           <div className="w-full flex gap-2 my-5">
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-            />
+            <DatePicker />
           </div>
           <div className="w-full flex gap-2 my-5">
             <TextField
