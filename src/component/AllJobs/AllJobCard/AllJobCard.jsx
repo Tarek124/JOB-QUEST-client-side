@@ -29,7 +29,7 @@ const AllJobCard = ({ item }) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Link to={`/jobDetails/${item._id}`}>
+          <Link className="mx-2" to={`/jobDetails/${item._id}`}>
             <Button sx={{ mb: 2 }} variant="contained">
               View Details
             </Button>

@@ -38,8 +38,21 @@ export default function JobByCategory() {
     categorizeJobs();
   }, [jobs]);
   return (
-    <div className="xl:px-32 p-6">
-      <Box sx={{ width: "100%", typography: "body1" }}>
+    <Box
+      sx={{
+        bgcolor: "background.default",
+        color: "text.primary",
+      }}
+      className="xl:px-32 p-6"
+    >
+      <Box
+        sx={{
+          width: "100%",
+          bgcolor: "background.default",
+          color: "text.primary",
+          typography: "body1",
+        }}
+      >
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -79,6 +92,6 @@ export default function JobByCategory() {
           </TabPanel>
         </TabContext>
       </Box>
-    </div>
+    </Box>
   );
 }

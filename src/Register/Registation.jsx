@@ -6,7 +6,7 @@ import useAuth from "../hooks/useAuth";
 import useSwal from "../hooks/useSwal";
 
 const Registation = () => {
-  const data = useAuth();
+  const { createUser, updateUser, createJWT } = useAuth();
   const { swalErr, swalSuccess } = useSwal();
   const location = useLocation();
   const myLocation = location.state ? location.state : "/";
@@ -19,13 +19,10 @@ const Registation = () => {
     const password = form.password.value;
     const photoURL = form.photoURL.value;
 
-    data
-      .createUser(email, password)
-      .then(() => {
-        data
-          .updateUser(name, photoURL)
+    createUser(email, password)
+      .then((res) => {
+        updateUser(name, photoURL)
           .then(() => {
-            swalSuccess("Registration successfully");
             navigate(myLocation);
             form.reset();
           })
@@ -33,6 +30,8 @@ const Registation = () => {
             console.log(err);
             swalErr("username or photo url is not valid");
           });
+        swalSuccess("Registration successfully");
+        createJWT(res?.user?.email);
       })
       .catch((err) => {
         console.log(err);

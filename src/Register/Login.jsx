@@ -6,7 +6,7 @@ import useAuth from "../hooks/useAuth";
 import useSwal from "../hooks/useSwal";
 
 const Login = () => {
-  const data = useAuth();
+  const { login, googleSignIn, createJWT } = useAuth();
   const { swalErr, swalSuccess } = useSwal();
   const location = useLocation();
   const myLocation = location.state ? location.state : "/";
@@ -16,12 +16,12 @@ const Login = () => {
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    data
-      .login(email, password)
-      .then(() => {
+    login(email, password)
+      .then((res) => {
         swalSuccess("Login successfully");
         navigate(myLocation);
         form.reset();
+        createJWT(res?.user?.email);
       })
       .catch((err) => {
         swalErr("password or email is incorrect!");
@@ -29,11 +29,11 @@ const Login = () => {
       });
   };
   const googleLogin = () => {
-    data
-      .googleSignIn()
-      .then(() => {
+    googleSignIn()
+      .then((res) => {
         swalSuccess("Login successfully");
         navigate(myLocation);
+      createJWT(res?.user?.email);
       })
       .catch((err) => {
         console.log(err);

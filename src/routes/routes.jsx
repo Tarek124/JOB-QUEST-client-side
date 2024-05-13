@@ -10,6 +10,8 @@ import Registation from "../Register/Registation";
 import NotFoundPage from "../NotFoundPage/NotFoundPage";
 import JobDetails from "../component/JobDetails/JobDetails";
 import PrivateRoute from "../privateRoute/PrivateRoute";
+import Blog from "../component/Blog/Blog";
+import ViewDetails from "../component/Blog/ViewDetails/ViewDetails";
 
 const router = createBrowserRouter([
   {
@@ -20,15 +22,25 @@ const router = createBrowserRouter([
       { path: "/", element: <Homepage /> },
       { path: "/alljobs", element: <AllJobs /> },
       { path: "/appliedjobs", element: <AppliedJobs /> },
-      { path: "/addajob", element: <AddJob /> },
+
       { path: "/myjobs", element: <MyJobs /> },
+      { path: "/blogs", element: <Blog /> },
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Registation /> },
+      { path: "/viewDetails/:id", element: <ViewDetails /> },
       {
         path: "/jobDetails/:id",
         element: (
           <PrivateRoute>
             <JobDetails />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/addajob",
+        element: (
+          <PrivateRoute>
+            <AddJob />
           </PrivateRoute>
         ),
       },
