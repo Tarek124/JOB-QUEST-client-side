@@ -4,7 +4,7 @@ import Lottie from "lottie-react";
 
 export default function NotFoundPage() {
   return (
-    <div className=" bg-white h-screen w-screen">
+    <div className=" bg-white h-screen w-screen overflow-hidden">
       <div className="">
         <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center min-h-screen justify-center">
           <div className="max-w-lg">
