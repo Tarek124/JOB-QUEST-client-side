@@ -22,7 +22,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Homepage /> },
       { path: "/alljobs", element: <AllJobs /> },
-      { path: "/appliedjobs", element: <AppliedJobs /> },
+
       { path: "/blogs", element: <Blog /> },
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Registation /> },
@@ -48,6 +48,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <MyJobs />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/appliedjobs",
+        element: (
+          <PrivateRoute>
+            <AppliedJobs />
           </PrivateRoute>
         ),
       },
