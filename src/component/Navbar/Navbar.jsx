@@ -72,7 +72,6 @@ function Navbar() {
   useEffect(() => {
     localStorage.setItem("theme", theme);
     const localTheme = localStorage.getItem("theme");
-    console.log(localTheme);
     data.setmyTheme(localTheme);
   }, [theme]);
 

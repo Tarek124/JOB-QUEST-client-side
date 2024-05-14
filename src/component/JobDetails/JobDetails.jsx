@@ -26,12 +26,10 @@ const JobDetails = () => {
         <p className="font-bold text-3xl py-1">We Are Looking for a</p>
         <h1 className="font-bold text-3xl md:text-6xl ">
           <span className="border-b-2 border-[#1983ec] bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-            {job?.title}
+            {job?.title?.toUpperCase()}
           </span>
         </h1>
-        <h2 className="mt-6  mb-1 font-semibold text-xl">
-          Description
-        </h2>
+        <h2 className="mt-6  mb-1 font-semibold text-xl">Description</h2>
         <p className="md:pr-32">{job?.description}</p>
         <div className="mt-2">
           <Typography sx={{ fontSize: 14 }} gutterBottom>
@@ -45,6 +43,9 @@ const JobDetails = () => {
           </Typography>{" "}
           <Typography sx={{ fontSize: 14 }} gutterBottom>
             Number of Applicants: {job?.applicants}
+          </Typography>
+          <Typography sx={{ fontSize: 14 }} gutterBottom>
+            Job Category: {job?.job_category || "Not Defined"}
           </Typography>
         </div>
         <div

@@ -1,10 +1,11 @@
 import { Box, Button, MenuItem, TextField } from "@mui/material";
-import useAuth from "../../hooks/useAuth";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useState } from "react";
-import { instance } from "../../main";
-import useSwal from "../../hooks/useSwal";
+import { useEffect, useState } from "react";
+import useAuth from "../../../hooks/useAuth";
+import useSwal from "../../../hooks/useSwal";
+import { instance } from "../../../main";
+import { useParams } from "react-router-dom";
 
 const currencies = ["On Site", "Remote", "Part-Time", "Hybrid"];
 const category = ["Software Development", "Marketing", "Finance", "Design"];
@@ -18,7 +19,9 @@ const salaryRange = [
   "$80,000 - $100,000",
 ];
 
-const AddJob = () => {
+const UpdateJob = () => {
+  const [job, setJob] = useState({});
+  const { id } = useParams();
   const { user, myTheme } = useAuth();
   const [jobPostingDate, setPostingDate] = useState(new Date());
   const [jobDeadline, setDeadline] = useState(new Date());
@@ -27,6 +30,14 @@ const AddJob = () => {
   const deadline = new Intl.DateTimeFormat("en-US").format(jobDeadline);
   const postingDate = new Intl.DateTimeFormat("en-US").format(jobPostingDate);
   const { swalErr, swalSuccess } = useSwal();
+
+  useEffect(() => {
+    instance
+      .get(`jobdetails/${id}`)
+      .then((res) => setJob(res.data))
+      .catch((err) => console.log(err));
+  }, [user]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -57,6 +68,7 @@ const AddJob = () => {
         console.log(err);
       });
   };
+  console.log(job);
   return (
     <Box
       sx={{
@@ -67,17 +79,18 @@ const AddJob = () => {
     >
       <div>
         <div className="my-5">
-          <h1 className="text-3xl font-bold">Add A New Job</h1>
+          <h1 className="text-3xl font-bold">Update Job</h1>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="w-full flex-col md:flex-row flex gap-4 my-4">
             <TextField
-              id="outlined-basic"
+              id="outlined-required"
               label="Job Title"
               variant="outlined"
               className="md:w-1/2"
               name="title"
               required
+              defaultValue={job.title}
             />
             <TextField
               id="outlined-basic"
@@ -86,6 +99,7 @@ const AddJob = () => {
               className="md:w-1/2"
               name="banner"
               required
+              defaultValue={job.banner}
             />
           </div>
           <div className="w-full flex-col md:flex-row flex gap-4 my-4">
@@ -139,28 +153,7 @@ const AddJob = () => {
               type="number"
             />
           </div>
-          <div className="w-full flex-col md:flex-row flex gap-4 my-4">
-            <TextField
-              id="outlined-basic"
-              label="Name"
-              variant="outlined"
-              className="md:w-1/2"
-              defaultValue={user?.displayName}
-              disabled
-              name="employer"
-              required
-            />
-            <TextField
-              id="outlined-basic"
-              label="Email"
-              variant="outlined"
-              className="md:w-1/2"
-              defaultValue={user?.email}
-              disabled
-              name="email"
-              required
-            />
-          </div>
+
           <div className="w-full flex-col md:flex-row flex gap-4 my-4">
             <label className="form-control w-full z-40">
               <div className="label">
@@ -202,7 +195,7 @@ const AddJob = () => {
             </TextField>
           </div>
           <Button type="submit" variant="contained">
-            Post
+            Update
           </Button>
         </form>
       </div>
@@ -210,7 +203,7 @@ const AddJob = () => {
   );
 };
 
-export default AddJob;
+export default UpdateJob;
 
 /*
 category
