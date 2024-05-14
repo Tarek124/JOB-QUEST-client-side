@@ -19,7 +19,7 @@ const salaryRange = [
 ];
 
 const AddJob = () => {
-  const { user, myTheme } = useAuth();
+  const { user, myTheme,forUpdateAllData, setForUpdateAllData } = useAuth();
   const [jobPostingDate, setPostingDate] = useState(new Date());
   const [jobDeadline, setDeadline] = useState(new Date());
   const theme = myTheme == "dark" ? "bg-[#121212] border-[#5A5A5A]" : "";
@@ -50,6 +50,7 @@ const AddJob = () => {
       .then((res) => {
         console.log(res);
         swalSuccess("Job added successfully");
+        setForUpdateAllData(!forUpdateAllData);
         form.reset();
       })
       .catch((err) => {

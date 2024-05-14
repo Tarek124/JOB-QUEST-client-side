@@ -3,17 +3,48 @@ import { useParams } from "react-router-dom";
 import { instance } from "../../main";
 import { Box, Button, Typography } from "@mui/material";
 import "animate.css";
+import moment from "moment";
+import useSwal from "../../hooks/useSwal";
+import useAuth from "../../hooks/useAuth";
 
 const JobDetails = () => {
   const [job, setJob] = useState({});
-  const [apply, setApply] = useState("Apply");
+  const [apply, setApply] = useState(true);
+  const [userApplied, setUserApplied] = useState(null);
+  const { user } = useAuth();
+  const { swalErr } = useSwal();
   const { id } = useParams();
+  const { email, displayName } = user;
   useEffect(() => {
     instance
       .get(`jobdetails/${id}`)
       .then((res) => setJob(res.data))
       .catch((err) => console.log(err));
-  }, []);
+    instance
+      .get(`/applyForJob/?email=${email}&name=${displayName}&id=${id}`)
+      .then((res) => {
+        console.log(res.data);
+        setUserApplied(res.data || null);
+      })
+      .catch((err) => console.log(err));
+  }, [apply]);
+
+  const handleApplyedJob = () => {
+    const currentTime = moment(); // Current date and time
+    const deadline = moment(job.deadline, "M/D/YYYY"); // Parse deadline date
+
+    if (currentTime.isBefore(deadline)) {
+      instance
+        .post("/applyForJob", { ...job, email, displayName })
+        .then((res) => {
+          console.log(res.data);
+          setApply(!apply);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      swalErr("You can't apply deadline is over");
+    }
+  };
   return (
     <Box
       sx={{
@@ -49,17 +80,15 @@ const JobDetails = () => {
           </Typography>
         </div>
         <div
-          className={`mt-5  ${apply == "Pending" ? "animate__hinge" : ""}`}
-          onClick={() => {
-            setApply("Pending");
-          }}
+          className={`mt-5  ${userApplied !== null ? "animate__hinge" : ""}`}
         >
           <Button
-            disabled={apply == "Pending" ? true : false}
+            disabled={userApplied !== null ? true : false}
+            onClick={handleApplyedJob}
             sx={{ mb: 2 }}
             variant="contained"
           >
-            {apply}
+            {userApplied === null ? "Apply" : "Pending"}
           </Button>
         </div>
       </div>

@@ -20,11 +20,24 @@ const salaryRange = [
 ];
 
 const UpdateJob = () => {
+  // eslint-disable-next-line no-unused-vars
   const [job, setJob] = useState({});
+  const [forUpdate, setForUpdate] = useState(true);
   const { id } = useParams();
-  const { user, myTheme } = useAuth();
+  const { user, myTheme, forUpdateAllData, setForUpdateAllData } = useAuth();
   const [jobPostingDate, setPostingDate] = useState(new Date());
   const [jobDeadline, setDeadline] = useState(new Date());
+  const [formValues, setFormValues] = useState({
+    _id: "",
+    title: "",
+    banner: "",
+    description: "",
+    job_category: "",
+    salaryRange: "",
+    applicants: 0,
+    category: "",
+  });
+
   const theme = myTheme == "dark" ? "bg-[#121212] border-[#5A5A5A]" : "";
   const label = myTheme == "dark" ? "text-[#B8B8AE]" : "text-[#212121]";
   const deadline = new Intl.DateTimeFormat("en-US").format(jobDeadline);
@@ -33,42 +46,58 @@ const UpdateJob = () => {
 
   useEffect(() => {
     instance
-      .get(`jobdetails/${id}`)
-      .then((res) => setJob(res.data))
+      .get(`updateJobs/${id}`)
+      .then((res) => {
+        setJob(res.data);
+        setFormValues({
+          _id: res.data._id || "",
+          title: res.data.title || "",
+          banner: res.data.banner || "",
+          description: res.data.description || "",
+          job_category: res.data.job_category || "",
+          salaryRange: res.data.salaryRange || "",
+          applicants: res.data.applicants || 0,
+          category: res.data.category || "",
+        });
+        setPostingDate(new Date(res.data.postingDate));
+        setDeadline(new Date(res.data.deadline));
+      })
       .catch((err) => console.log(err));
-  }, [user]);
+  }, [user, forUpdate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const form = e.target;
 
-    // Create FormData object to collect form data
-    const formData = new FormData(form);
-
-    // Convert FormData to object
     const formObject = {
+      ...formValues,
       deadline,
       postingDate,
       email: user?.email,
       employer: user?.displayName || user.email,
     };
-    formData.forEach((value, key) => {
-      formObject[key] = value;
-    });
 
     instance
-      .post("addedJobs", formObject)
+      .put("/updateJobs", formObject)
       .then((res) => {
         console.log(res);
-        swalSuccess("Job added successfully");
-        form.reset();
+        swalSuccess("Updated jobs information");
+        setForUpdate(!forUpdate);
+        setForUpdateAllData(!forUpdateAllData);
       })
       .catch((err) => {
         swalErr("somthing is wrong");
         console.log(err);
       });
   };
-  console.log(job);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
   return (
     <Box
       sx={{
@@ -90,7 +119,8 @@ const UpdateJob = () => {
               className="md:w-1/2"
               name="title"
               required
-              defaultValue={job.title}
+              value={formValues.title}
+              onChange={handleInputChange}
             />
             <TextField
               id="outlined-basic"
@@ -99,7 +129,8 @@ const UpdateJob = () => {
               className="md:w-1/2"
               name="banner"
               required
-              defaultValue={job.banner}
+              value={formValues.banner}
+              onChange={handleInputChange}
             />
           </div>
           <div className="w-full flex-col md:flex-row flex gap-4 my-4">
@@ -111,6 +142,8 @@ const UpdateJob = () => {
               className="md:w-1/2"
               name="description"
               required
+              value={formValues.description}
+              onChange={handleInputChange}
             />
             <TextField
               id="outlined-select-currency"
@@ -119,6 +152,8 @@ const UpdateJob = () => {
               className="md:w-1/2"
               name="job_category"
               required
+              value={formValues.job_category}
+              onChange={handleInputChange}
             >
               {currencies.map((option, inx) => (
                 <MenuItem key={inx} value={option}>
@@ -135,6 +170,8 @@ const UpdateJob = () => {
               className="md:w-1/2"
               name="salaryRange"
               required
+              value={formValues.salaryRange}
+              onChange={handleInputChange}
             >
               {salaryRange.map((option, inx) => (
                 <MenuItem key={inx} value={option}>
@@ -146,11 +183,12 @@ const UpdateJob = () => {
               id="outlined-basic"
               label="Job Applicants"
               variant="outlined"
-              defaultValue={"0"}
               className="md:w-1/2"
               name="applicants"
               required
               type="number"
+              value={formValues.applicants}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -186,6 +224,8 @@ const UpdateJob = () => {
               className="md:w-1/2"
               name="category"
               required
+              value={formValues.category}
+              onChange={handleInputChange}
             >
               {category.map((option, inx) => (
                 <MenuItem key={inx} value={option}>

@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 
 const MyJobs = () => {
   const [jobs, setJobs] = useState([]);
-  const { user } = useAuth();
+  const { user, forUpdateAllData, setForUpdateAllData } = useAuth();
 
   useEffect(() => {
     instance
@@ -40,6 +40,7 @@ const MyJobs = () => {
               });
               const newJob = jobs.filter((job) => job._id !== id);
               setJobs(newJob);
+              setForUpdateAllData(!forUpdateAllData);
             }
           })
           .catch((err) => {

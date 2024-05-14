@@ -166,6 +166,7 @@ export default function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [jobs, setJobs] = useState([]);
   const [myTheme, setmyTheme] = useState();
+  const [forUpdateAllData, setForUpdateAllData] = useState(true);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -180,7 +181,7 @@ export default function AuthProvider({ children }) {
         setJobs(res.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [forUpdateAllData]);
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
@@ -230,6 +231,8 @@ export default function AuthProvider({ children }) {
     createJWT,
     myTheme,
     setmyTheme,
+    forUpdateAllData,
+    setForUpdateAllData,
   };
   const darkTheme = createTheme({
     palette: {
