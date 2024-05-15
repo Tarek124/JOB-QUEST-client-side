@@ -2,23 +2,37 @@ import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth.jsx";
 import { instance } from "../../main.jsx";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { CircularProgress, IconButton } from "@mui/material";
+import {
+  CircularProgress,
+  IconButton,
+  MenuItem,
+  TextField,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+
+const category = ["Software Development", "Marketing", "Finance", "Design"];
 
 const AppliedJobs = () => {
   const { user, myTheme } = useAuth();
   const [allAppliedJob, setAllAppliedJob] = useState(null);
-  console.log(allAppliedJob);
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+
   useEffect(() => {
     instance
-      .get(`/allApplyForJob/?email=${user?.email}&name=${user?.displayName}`)
+      .get(
+        `/allApplyForJob/?email=${user?.email}&name=${user?.displayName}&category=${selectedCategory}`
+      )
       .then((res) => {
         console.log(res.data);
         setAllAppliedJob(res.data);
       })
       .catch((err) => console.log(err));
-  }, [user]);
+  }, [user, selectedCategory]);
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", myTheme);
   }, [myTheme]);
@@ -46,13 +60,31 @@ const AppliedJobs = () => {
             }
           })
           .catch((err) => {
-            console.log(err)
+            console.log(err);
           });
       }
     });
   };
+  console.log(selectedCategory);
   return allAppliedJob ? (
     <div className="lg:px-20 lg:py-10 overflow-x-auto my-8">
+      <div className="mb-4">
+        <TextField
+          id="outlined-select-currency"
+          select
+          label="Category"
+          className="w-52"
+          name="category"
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+        >
+          {category.map((option, inx) => (
+            <MenuItem key={inx} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
       <table className="table">
         <thead>
           <tr>

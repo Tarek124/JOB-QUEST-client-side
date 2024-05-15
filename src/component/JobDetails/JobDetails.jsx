@@ -41,6 +41,14 @@ const JobDetails = () => {
           setApply(!apply);
         })
         .catch((err) => console.log(err));
+      const applicants = parseInt(job.applicants) + 1;
+      const id = job._id;
+      instance
+        .put("/updateApplicants", { applicants, id })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => console.log(err));
     } else {
       swalErr("You can't apply deadline is over");
     }

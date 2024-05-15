@@ -12,6 +12,8 @@ import { GoogleAuthProvider } from "firebase/auth";
 import { instance } from "../main";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 const provider = new GoogleAuthProvider();
 export const AppContext = createContext();
@@ -164,7 +166,6 @@ const questions = [
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [jobs, setJobs] = useState([]);
   const [myTheme, setmyTheme] = useState();
   const [forUpdateAllData, setForUpdateAllData] = useState(true);
 
@@ -174,14 +175,18 @@ export default function AuthProvider({ children }) {
       setUser(user);
     });
   }, []);
-  useEffect(() => {
-    instance
-      .get("allJobs")
-      .then((res) => {
-        setJobs(res.data);
-      })
-      .catch((err) => console.log(err));
-  }, [forUpdateAllData]);
+
+  const create = async () => {
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_SERVER_URL}/allJobs`
+    );
+    return data;
+  };
+
+  const { data: jobs = [] } = useQuery({
+    queryFn: async () => await create(),
+  });
+
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
@@ -202,7 +207,7 @@ export default function AuthProvider({ children }) {
   };
   const logout = () => {
     instance
-      .get("logout")
+      .get("/logout")
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
     return signOut(auth);

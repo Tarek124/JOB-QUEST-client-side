@@ -213,7 +213,10 @@ function Navbar() {
 
               {data?.user ? (
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src={data?.user?.photoURL} />
+                  <Avatar
+                    alt={data?.user?.displayName || data?.user?.email}
+                    src={data?.user?.photoURL}
+                  />
                 </IconButton>
               ) : (
                 <Link to="login">Login</Link>
