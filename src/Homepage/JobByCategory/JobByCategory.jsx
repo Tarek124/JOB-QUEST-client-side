@@ -43,7 +43,7 @@ export default function JobByCategory() {
         bgcolor: "background.default",
         color: "text.primary",
       }}
-      className="xl:px-32 p-6"
+      className="xl:px-32"
     >
       <Box
         sx={{
@@ -62,7 +62,7 @@ export default function JobByCategory() {
               <Tab label="Finance" value="4" />
             </TabList>
           </Box>
-          <TabPanel value="1">
+          <TabPanel className="p-0" value="1">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {softwareDevelopmentJobs?.map((item) => (
                 <JobCard key={item._id} item={item} />

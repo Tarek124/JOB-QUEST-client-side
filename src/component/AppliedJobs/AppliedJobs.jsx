@@ -2,14 +2,19 @@ import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth.jsx";
 import { instance } from "../../main.jsx";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {
-  CircularProgress,
-  IconButton,
-  MenuItem,
-  TextField,
-} from "@mui/material";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import { Button, IconButton, MenuItem, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import Loading from "../Loading/Loading.jsx";
+import {
+  PDFDownloadLink,
+  Page,
+  Text,
+  View,
+  Document,
+  StyleSheet,
+} from "@react-pdf/renderer";
 
 const category = [
   "All",
@@ -18,7 +23,40 @@ const category = [
   "Finance",
   "Design",
 ];
-
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: "column",
+    backgroundColor: "#ffffff",
+    padding: 20,
+  },
+  header: {
+    marginBottom: 20,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  tableHeader: {
+    flexDirection: "row",
+    borderBottomColor: "#000000",
+    borderBottomWidth: 1,
+    paddingBottom: 10,
+    marginBottom: 10,
+  },
+  headerItem: {
+    width: "25%",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  row: {
+    flexDirection: "row",
+    marginBottom: 10,
+  },
+  item: {
+    width: "25%",
+    fontSize: 14,
+  },
+});
 const AppliedJobs = () => {
   const { user, myTheme } = useAuth();
   const [allAppliedJob, setAllAppliedJob] = useState(null);
@@ -39,9 +77,11 @@ const AppliedJobs = () => {
       })
       .catch((err) => console.log(err));
   }, [user, selectedCategory]);
+
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", myTheme);
   }, [myTheme]);
+
   const handleDeleteAppliedjob = (id) => {
     Swal.fire({
       title: "Are you sure to Delete this?",
@@ -71,10 +111,11 @@ const AppliedJobs = () => {
       }
     });
   };
+
   console.log(selectedCategory);
   return allAppliedJob ? (
     <div className="lg:px-20 lg:py-10 overflow-x-auto my-8">
-      <div className="mb-4">
+      <div className="mb-4 px-4">
         <TextField
           id="outlined-select-currency"
           select
@@ -145,12 +186,44 @@ const AppliedJobs = () => {
           ))}
         </tbody>
       </table>
+      <div className="px-4 my-4">
+        <Button variant="outlined" startIcon={<CloudDownloadIcon />}>
+          <PDFDownloadLink
+            document={<AppliedJobsPDF allAppliedJob={allAppliedJob} />}
+            fileName="applied-jobs.pdf"
+          >
+            {({ loading }) => (loading ? "Loading document..." : "DOWNLOAD")}
+          </PDFDownloadLink>
+        </Button>
+      </div>
     </div>
   ) : (
-    <div className="w-full h-[80vh] flex justify-center items-center ">
-      <CircularProgress />
-    </div>
+    <Loading />
   );
 };
+
+const AppliedJobsPDF = ({ allAppliedJob }) => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Applied Jobs</Text>
+      </View>
+      <View style={styles.tableHeader}>
+        <Text style={styles.headerItem}>Title</Text>
+        <Text style={styles.headerItem}>Details</Text>
+        <Text style={styles.headerItem}>Deadline</Text>
+        <Text style={styles.headerItem}>Action</Text>
+      </View>
+      {allAppliedJob.map((item) => (
+        <View key={item._id} style={styles.row}>
+          <Text style={styles.item}>{item.title}</Text>
+          <Text style={styles.item}>{item.job_category}</Text>
+          <Text style={styles.item}>{item.deadline}</Text>
+          <Text style={styles.item}>Delete</Text>
+        </View>
+      ))}
+    </Page>
+  </Document>
+);
 
 export default AppliedJobs;

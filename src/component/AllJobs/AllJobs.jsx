@@ -38,7 +38,7 @@ const AllJobs = () => {
       }}
       className="xl:px-32 xl:py-20 p-6"
     >
-      <div className="text-center my-4">
+      <div className="text-center my-4 md:w-1/3">
         <Paper
           onSubmit={searchJobs}
           component="form"
@@ -46,7 +46,6 @@ const AllJobs = () => {
             p: "2px 4px",
             display: "flex",
             alignItems: "center",
-            width: 400,
           }}
         >
           <InputBase
