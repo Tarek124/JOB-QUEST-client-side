@@ -11,7 +11,13 @@ import {
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const category = ["Software Development", "Marketing", "Finance", "Design"];
+const category = [
+  "All",
+  "Software Development",
+  "Marketing",
+  "Finance",
+  "Design",
+];
 
 const AppliedJobs = () => {
   const { user, myTheme } = useAuth();

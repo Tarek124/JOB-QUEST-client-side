@@ -2,11 +2,16 @@ import "animate.css";
 import Lottie from "lottie-react";
 import { Link } from "react-router-dom";
 import myAnimation from "./Animation - 1715494485869.json";
+import { motion } from "framer-motion";
 
 const Banner = () => {
   return (
     <div className="overflow-hidden xl:flex-row flex flex-col justify-center  items-center gap-4 xl:gap-16 p-6 xl:p-32 text-white bg-gradient-to-r from-sky-700 to-indigo-400">
-      <div className="xl:w-1/2 w-full">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="xl:w-1/2 w-full"
+      >
         <h1 className="text-5xl md:text-6xl mt-4 font-bold">
           Welcome to JOBQUEST
         </h1>
@@ -24,9 +29,11 @@ const Banner = () => {
             View All Job
           </button>
         </Link>
-      </div>
+      </motion.div>
       <div className="xl:w-1/3 w-full animate__fadeInRight animate__animated py-4">
-        <Lottie animationData={myAnimation} />
+        <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.8 }}>
+          <Lottie animationData={myAnimation} />
+        </motion.div>
       </div>
     </div>
   );

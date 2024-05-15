@@ -5,11 +5,21 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const AllJobCard = ({ item }) => {
   return (
-    <div className="my-4">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        duration: 0.8,
+        delay: 0.5,
+        ease: [0, 0.71, 0.2, 1.01],
+      }}
+      className="my-4"
+    >
       <Card sx={{ minWidth: 275 }}>
         <CardContent>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -36,7 +46,7 @@ const AllJobCard = ({ item }) => {
           </Link>
         </CardActions>
       </Card>
-    </div>
+    </motion.div>
   );
 };
 

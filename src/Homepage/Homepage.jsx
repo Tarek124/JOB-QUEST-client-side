@@ -1,14 +1,13 @@
-import { CircularProgress } from "@mui/material";
 import useAuth from "../hooks/useAuth";
 import Banner from "./Banner/Banner";
 import JobByCategory from "./JobByCategory/JobByCategory";
+import Loading from "../component/Loading/Loading";
 
 export default function Homepage() {
   const data = useAuth();
+
   return data?.loading ? (
-    <div className="w-full h-[80vh] flex justify-center items-center ">
-      <CircularProgress />
-    </div>
+    <Loading />
   ) : (
     <div>
       <Banner />
