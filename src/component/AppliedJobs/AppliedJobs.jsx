@@ -112,7 +112,6 @@ const AppliedJobs = () => {
     });
   };
 
-  console.log(selectedCategory);
   return allAppliedJob ? (
     <div className="lg:px-20 lg:py-10 overflow-x-auto my-8">
       <div className="mb-4 px-4">

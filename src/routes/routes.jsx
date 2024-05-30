@@ -13,6 +13,7 @@ import PrivateRoute from "../privateRoute/PrivateRoute";
 import Blog from "../component/Blog/Blog";
 import ViewDetails from "../component/Blog/ViewDetails/ViewDetails";
 import UpdateJob from "../component/MyJobs/UpdateJob/UpdateJob";
+import Resume from "../component/Resume/Resume";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Registation /> },
       { path: "/viewDetails/:id", element: <ViewDetails /> },
+      { path: "/resumebuilder", element: <Resume /> },
       {
         path: "/jobDetails/:id",
         element: (

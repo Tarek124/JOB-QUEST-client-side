@@ -23,6 +23,7 @@ const pages = [
   "Add A Job",
   "My Jobs",
   "Blogs",
+  "Resume Builder",
 ];
 
 function Navbar() {
